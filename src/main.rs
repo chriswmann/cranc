@@ -37,14 +37,14 @@ where
     type Item = Iter::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
-        print!("{}", CLEAR);
+        // print!("{}", CLEAR);
         match self.bound {
             Some(bound) => {
-                println!("[{}{}]", "*".repeat(self.i), ".".repeat(bound - self.i));
+                println!("[{}{}]", "*".repeat(self.i), " ".repeat(bound - self.i));
                 self.i += 1;
             }
             None => {
-                println!("{}", "*".repeat(self.i));
+                println!(" {}", "*".repeat(self.i));
                 self.i += 1;
             }
         }
