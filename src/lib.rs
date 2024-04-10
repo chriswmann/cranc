@@ -1,5 +1,7 @@
-use std::collections::HashSet;
-use std::{thread::sleep, time::Duration};
+#![deny(missing_docs)]
+#![deny(clippy::missing_docs_in_private_items)]
+#![deny(rustdoc::broken_intra_doc_links)]
+//! A simple progress bar for iterators
 
 const CLEAR: &str = "\x1B[2J\x1B[1;1H";
 
@@ -69,29 +71,3 @@ where
     }
 }
 
-fn expensive_calculation(_n: &i32) {
-    sleep(Duration::from_millis(400));
-}
-
-fn main() {
-    let v = [1, 2, 3, 4, 5];
-    for n in v.iter().progress().with_bound() {
-        expensive_calculation(n);
-    }
-    expensive_calculation(&6);
-    let mut h = HashSet::new();
-    h.insert(0);
-    h.insert(1);
-    h.insert(2);
-    h.insert(3);
-    h.insert(4);
-    for n in h.iter().progress().with_bound() {
-        expensive_calculation(n);
-    }
-    for i in (0..).progress() {
-        expensive_calculation(&i);
-        if i == 6 {
-            break;
-        }
-    }
-}

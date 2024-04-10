@@ -2,7 +2,15 @@
 name = "progrust-bar"
 version = "0.1.0"
 edition = "2021"
+authors = ["Chris Mann"]
+description = "A simple progress bar for Rust"
+license = "MIT"
+homepage = "https://github.com/chriswmann/progrust-bar"
+repository = "https://github.com/chriswmann/progrust-bar"
+readme = "README.md"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "progrust_bar"
+path = "src/lib.rs"
 
 [dependencies]
