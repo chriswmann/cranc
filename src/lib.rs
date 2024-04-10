@@ -43,6 +43,8 @@ impl<Iter> ProgressBar<Iter>
 where
     Iter: ExactSizeIterator,
 {
+    /// Set the bound of the progress bar to the length of the iterator.
+    /// This enables a more informative display of progress.
     pub fn with_bound(mut self) -> Self {
         self.bound = Some(self.iter.len());
         self
