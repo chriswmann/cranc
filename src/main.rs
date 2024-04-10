@@ -21,6 +21,16 @@ impl<Iter> Progress<Iter> {
 }
 
 impl<Iter> Progress<Iter>
+{
+    fn format_bar(&self) -> String {
+        match self.bound {
+            Some(bound) => format!("[{}{}]", "*".repeat(self.i), " ".repeat(bound - self.i)),
+            None => format!(" {}", "*".repeat(self.i)),
+        }
+    }
+}
+
+impl<Iter> Progress<Iter>
 where
     Iter: ExactSizeIterator,
 {
@@ -37,19 +47,13 @@ where
     type Item = Iter::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
-        // print!("{}", CLEAR);
-        match self.bound {
-            Some(bound) => {
-                println!("[{}{}]", "*".repeat(self.i), " ".repeat(bound - self.i));
-                self.i += 1;
-            }
-            None => {
-                println!(" {}", "*".repeat(self.i));
-                self.i += 1;
-            }
-        }
+        print!("{}", CLEAR);
+        let bar = self.format_bar();
+        println!("{}", bar);
+        self.i += 1;
         self.iter.next()
     }
+    
 }
 
 trait ProgressIteratorExt: Sized {
