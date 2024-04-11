@@ -116,21 +116,24 @@ pub mod bar {
         fn test_progress_bar_format_empty_bounded_iter() {
             let v: Vec<u8> = Vec::new();
             let p = v.iter().progress().with_bound();
-            assert_eq!(p.format_bar().starts_with("["), true);
+            assert_eq!(p.format_bar().starts_with(" "), true);
+            assert_eq!(p.format_bar().contains("100%"), true);
         }
 
         #[test]
         fn test_progress_bar_format_bounded_iter() {
             let v = vec![1];
             let p = v.iter().progress().with_bound();
-            assert_eq!(p.format_bar().starts_with("["), true);
+            assert_eq!(p.format_bar().starts_with(" "), true);
+            assert_eq!(p.format_bar().contains("100%"), true);
         }
 
         #[test]
         fn test_progress_bar_format_unbounded_iter() {
             let v = [0..];
             let p = v.iter().progress();
-            assert_eq!(!p.format_bar().starts_with("["), true);
+            assert_eq!(p.format_bar().starts_with(" "), true);
+            assert_eq!(p.format_bar().contains(|x| x == '\\' || x == '|' || x == '-' || x == '/'), true);
         }
     }
 }
