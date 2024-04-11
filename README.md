@@ -1,3 +1,5 @@
+![ci workflow](https://github.com/chriswmann/progrust-bar/actions/workflows/ci.yml/badge.svg)
+
 # progrust
 
 A minimal/simple terminal progress bar in rust.
