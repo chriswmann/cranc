@@ -92,15 +92,34 @@ pub mod bar {
         use super::*;
     
         #[test]
-        fn test_progress_still_iterates() {
-            let v = vec![1, 2, 3, 4, 5];
+        fn test_progress_adapted_iterator_still_iterates() {
+            let v = vec![1, 2, 3];
             let mut p = v.iter().progress().with_bound();
             assert_eq!(p.next(), Some(&1));
             assert_eq!(p.next(), Some(&2));
             assert_eq!(p.next(), Some(&3));
-            assert_eq!(p.next(), Some(&4));
-            assert_eq!(p.next(), Some(&5));
             assert_eq!(p.next(), None);
+        }
+
+        #[test]
+        fn test_progress_bar_format_empty_bounded_iter() {
+            let v: Vec<u8> = Vec::new();
+            let p = v.iter().progress().with_bound();
+            assert_eq!(p.format_bar().starts_with("["), true);
+        }
+
+        #[test]
+        fn test_progress_bar_format_bounded_iter() {
+            let v = vec![1];
+            let p = v.iter().progress().with_bound();
+            assert_eq!(p.format_bar().starts_with("["), true);
+        }
+
+        #[test]
+        fn test_progress_bar_format_unbounded_iter() {
+            let v = [0..];
+            let p = v.iter().progress();
+            assert_eq!(!p.format_bar().starts_with("["), true);
         }
     }
 }
