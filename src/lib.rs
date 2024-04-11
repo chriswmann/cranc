@@ -16,6 +16,7 @@ pub mod bar {
         iter: Iter,
         i: usize,
         bound: Option<usize>,
+        width: usize,
     }
     
     /// Create a new `Progress` struct from an iterator
@@ -27,6 +28,7 @@ pub mod bar {
                 iter,
                 i: 0,
                 bound: None,
+                width: 100,
             }
         }
     }
@@ -36,12 +38,12 @@ pub mod bar {
         fn format_bar(&self) -> String {
             match self.bound {
                 Some(bound) => {
-                    let percent = self.i as f64 / bound as f64 * 100.0;
+                    let percent = self.i as f64 / bound as f64 * self.width as f64;
                     let done = percent as usize;
-                    let remaining = 100 - done;
-                    format!("[{}{}] {:6.2}/100", "*".repeat(done as usize), " ".repeat(remaining), percent)
+                    let remaining = self.width - done;
+                    format!(" {:6.2}/100% [{}{}]", percent, "*".repeat(done as usize), " ".repeat(remaining))
                 },
-                None => format!("({}{}) {:3}", "*".repeat(self.i % 100), " ".repeat(100 - self.i % 100), self.i),
+                None => format!("{:12} {}", self.i, ["-", "\\", "|", "/"][self.i % 4]),
             }
         }
     }
@@ -54,6 +56,13 @@ pub mod bar {
         /// This enables a more informative display of progress.
         pub fn with_bound(mut self) -> Self {
             self.bound = Some(self.iter.len());
+            self
+        }
+
+        /// Use a bounded progress bar with a specific width
+        pub fn with_sized_bound(mut self, width: usize) -> Self {
+            self.bound = Some(self.iter.len());
+            self.width = width;
             self
         }
     }
