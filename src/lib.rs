@@ -36,10 +36,12 @@ pub mod bar {
         fn format_bar(&self) -> String {
             match self.bound {
                 Some(bound) => {
-                    let percent = (self.i as f64 / bound as f64) * 100.0;
-                    format!("[{}{}]", "*".repeat(percent.floor() as usize), " ".repeat(100 - percent.floor() as usize))
+                    let percent = self.i as f64 / bound as f64 * 100.0;
+                    let done = percent as usize;
+                    let remaining = 100 - done;
+                    format!("[{}{}] {:6.2}/100", "*".repeat(done as usize), " ".repeat(remaining), percent)
                 },
-                None => format!(" {}", "*".repeat(self.i)),
+                None => format!("({}{}) {:3}", "*".repeat(self.i % 100), " ".repeat(100 - self.i % 100), self.i),
             }
         }
     }
