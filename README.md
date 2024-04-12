@@ -1,13 +1,13 @@
 ![ci workflow](https://github.com/chriswmann/progrust-bar/actions/workflows/ci.yml/badge.svg)
 
-# progrust
+# progrust-bar
 
-A minimal/simple terminal progress bar in rust.
+A simple terminal progress bar in rust.
 
-Very early stages of development so it's not usable at all yet.
+Early stages of development so it's basic and rough around the edges.
 
-Code is just copied from 
+Code based on 
 [Will Chricton's excellent talk, "Type-Driven API Design in Rust"](https://www.youtube.com/watch?v=bnnacleqg6k)
-at the moment.
+ with some inspiration from [tqdm](https://github.com/tqdm/tqdm).
 
 
