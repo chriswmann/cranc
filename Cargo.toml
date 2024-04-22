@@ -10,13 +10,10 @@ categories = ["command-line-utilities"]
 homepage = "https://github.com/chriswmann/progrust-bar"
 repository = "https://github.com/chriswmann/progrust-bar"
 readme = "README.md"
+include = ["src/lib.rs", "LICENSE", "README.md"]
 
 [lib]
-name = "progrust_bar"
+name = "progrust"
 path = "src/lib.rs"
-
-[profile.release-with-debug]
-inherits = "release"
-debug = true
 
 [dependencies]

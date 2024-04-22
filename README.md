@@ -10,4 +10,3 @@ Code based on
 [Will Chricton's excellent talk, "Type-Driven API Design in Rust"](https://www.youtube.com/watch?v=bnnacleqg6k)
  with some inspiration from [tqdm](https://github.com/tqdm/tqdm).
 
-

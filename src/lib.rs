@@ -176,3 +176,5 @@ pub mod bar {
         }
     }
 }
+
+pub use bar::ProgressBarIteratorExt as ProgressBar;
