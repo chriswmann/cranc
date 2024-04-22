@@ -38,7 +38,7 @@ pub mod bar {
 
     /// Create a new `Progress` struct from an iterator
     impl<Iter> ProgressBar<Iter> {
-        /// Create a new
+        /// Create a new `Progress` struct from an iterator.
         pub fn new(iter: Iter) -> Self {
             Self {
                 iter,
