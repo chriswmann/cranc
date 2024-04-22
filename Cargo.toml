@@ -13,4 +13,9 @@ readme = "README.md"
 name = "progrust_bar"
 path = "src/lib.rs"
 
+[profile.release-with-debug]
+inherits = "release"
+debug = true
+
 [dependencies]
+
