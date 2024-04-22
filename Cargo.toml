@@ -3,8 +3,10 @@ name = "progrust-bar"
 version = "0.1.0"
 edition = "2021"
 authors = ["Chris Mann"]
+license = "MIT or Apache-2.0"
 description = "A simple progress bar for Rust"
-license = "MIT"
+keywords = ["progress", "bar", "cli", "terminal"]
+categories = ["command-line-utilities"]
 homepage = "https://github.com/chriswmann/progrust-bar"
 repository = "https://github.com/chriswmann/progrust-bar"
 readme = "README.md"
@@ -18,4 +20,3 @@ inherits = "release"
 debug = true
 
 [dependencies]
-
