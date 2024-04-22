@@ -94,6 +94,7 @@ pub mod bar {
 
         /// Use a bounded progress bar with a specific width
         pub fn sized_custom_width(mut self, width: usize) -> Self {
+            self.bound = Some(self.iter.len());
             self.width = std::cmp::max(width, 1);
             self
         }
