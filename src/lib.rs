@@ -134,7 +134,7 @@ pub mod bar {
         use super::*;
 
         #[test]
-        fn progress_adapted_iterator_still_iterates() {
+        fn iterator_still_iterates() {
             let v = &[1, 2, 3];
             let mut p = v.iter().progress().sized();
             assert_eq!(p.next(), Some(&1));
@@ -144,14 +144,14 @@ pub mod bar {
         }
 
         #[test]
-        fn progress_bar_format_empty_sized_iter() {
+        fn format_empty_sized_iter() {
             let v: Vec<u8> = Vec::new();
             let p = v.iter().progress().sized();
             assert_eq!(p.format_bar().len(), 19);
         }
 
         #[test]
-        fn progress_bar_format_sized_iter() {
+        fn format_sized_iter() {
             let v = &[1];
             let p = v.iter().progress().sized();
             assert!(p.format_bar().starts_with(' '));
@@ -159,16 +159,17 @@ pub mod bar {
         }
 
         #[test]
-        fn progress_bar_with_width() {
+        fn format_with_width() {
             let v = &[1, 2, 3];
             let p = v.iter().progress().sized_custom_width(10);
-            assert_eq!(p.format_bar().len(), 12);
+            assert!(p.format_bar().contains('%'));
+            assert_eq!(p.format_bar().len(), 91);
             assert_eq!(p.width, 10);
             assert_eq!(p.nbars, 8);
         }
 
         #[test]
-        fn progress_bar_format_unsized_iter() {
+        fn format_unsized_iter() {
             let v = [0..];
             let p = v.iter().progress();
             assert!(p.format_bar().starts_with(' '));
