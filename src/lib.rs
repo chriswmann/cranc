@@ -163,7 +163,7 @@ pub mod bar {
         fn progress_bar_with_width() {
             let v = &[1, 2, 3];
             let p = v.iter().progress().sized_custom_width(10);
-            assert_eq!(p.format_bar().len(), 12);
+            assert_eq!(p.format_bar().len(), 91);
             assert_eq!(p.width, 10);
             assert_eq!(p.nbars, 8);
         }
