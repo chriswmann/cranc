@@ -2,11 +2,11 @@
 
 # progrust-bar
 
-A simple terminal progress bar in rust.
+A simple terminal progress bar in rust with a nice, type-driven API.
 
 Early stages of development so it's basic and rough around the edges.
 
-The API is subject to change even with patch number changes.
+The API is subject to substantial change.
 
 You almost certainly shouldn't use this (yet).
 
