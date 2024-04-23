@@ -4,7 +4,8 @@
     clippy::missing_errors_doc,
     clippy::missing_panics_doc
 )]
-//! A simple progress bar for iterators
+//! A simple progress indicator for iterators. Displays a spinner if the iterator is not sized.
+//! For sized iterators, a progress bar is displayed by default.
 
 /// The `bar` module contains the `ProgressBar` struct and its associated functions
 pub mod bar {
@@ -13,7 +14,7 @@ pub mod bar {
 
     /// A wrapper around an iterator that prints a progress bar
     #[derive(Debug)]
-    pub struct ProgressBar<Iter> {
+    pub struct ProgressIndicator<Iter> {
         /// The iterator to wrap.
         iter: Iter,
         /// A counter so we can track the progress of the iterator.
@@ -37,7 +38,7 @@ pub mod bar {
     }
 
     /// Create a new `Progress` struct from an iterator
-    impl<Iter> ProgressBar<Iter> {
+    impl<Iter> ProgressIndicator<Iter> {
         /// Create a new `Progress` struct from an iterator.
         pub fn new(iter: Iter) -> Self {
             Self {
@@ -53,8 +54,40 @@ pub mod bar {
         }
     }
 
-    impl<Iter> ProgressBar<Iter> {
-        /// Format the progress bar for the current iteration
+    /// Extension trait for iterators to enable the progress bar
+    pub trait ProgressIndicatorIteratorExt: Sized {
+        /// Add a progress indicator around an iterator
+        fn progress(self) -> ProgressIndicator<Self>;
+    }
+
+    impl<Iter> ProgressIndicatorIteratorExt for Iter
+    where
+        Iter: Iterator,
+    {
+        fn progress(self) -> ProgressIndicator<Self> {
+            ProgressIndicator::new(self)
+        }
+    }
+
+    impl<Iter> Iterator for ProgressIndicator<Iter>
+    where
+        Iter: Iterator,
+    {
+        type Item = Iter::Item;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            print!("{}", CLEAR);
+            let bar = self.format_bar();
+            println!("{}", bar);
+            self.i += 1;
+            self.iter.next()
+        }
+    }
+
+    impl<Iter> ProgressIndicator<Iter> {
+        /// Format the progress indicator for the current iteration
+        /// Use a bar if the the iterator's size has been used to define
+        /// ProgressIndicator.bound, otherwise use a spinner.
         fn format_bar(&self) -> String {
             match self.bound {
                 Some(bound) => {
@@ -81,52 +114,63 @@ pub mod bar {
         }
     }
 
-    impl<Iter> ProgressBar<Iter>
+    impl<Iter> ProgressIndicator<Iter>
     where
         Iter: ExactSizeIterator,
     {
         /// Set the bound of the progress bar to the length of the iterator.
-        /// This enables a more informative display of progress.
-        pub fn sized(mut self) -> Self {
+        ///
+        /// # Example
+        ///
+        /// ```
+        /// use progrust::ProgressIndicator;
+        ///
+        /// let v = &[1, 2, 3];
+        /// let p = v.iter().progress().bar();
+        /// for i in p {
+        ///     println!("{}", i);
+        /// }
+        /// ```
+        pub fn bar(mut self) -> Self {
             self.bound = Some(self.iter.len());
             self
         }
 
-        /// Use a bounded progress bar with a specific width
-        pub fn sized_custom_width(mut self, width: usize) -> Self {
+        /// Use a bounded progress bar with a specific display width
+        ///
+        /// # Example
+        ///
+        /// ```
+        /// use progrust::ProgressIndicator;
+        ///
+        /// let v = &[1, 2, 3];
+        /// let p = v.iter().progress().bar_custom_width(10);
+        /// for i in p {
+        ///     println!("{}", i);
+        /// }
+        /// ```
+        pub fn bar_custom_width(mut self, width: usize) -> Self {
             self.bound = Some(self.iter.len());
             self.width = std::cmp::max(width, 1);
             self
         }
-    }
 
-    impl<Iter> Iterator for ProgressBar<Iter>
-    where
-        Iter: Iterator,
-    {
-        type Item = Iter::Item;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            print!("{}", CLEAR);
-            let bar = self.format_bar();
-            println!("{}", bar);
-            self.i += 1;
-            self.iter.next()
-        }
-    }
-
-    /// Extension trait for iterators to enable the progress bar
-    pub trait ProgressBarIteratorExt: Sized {
-        /// Add a progress bar around an iterator
-        fn progress(self) -> ProgressBar<Self>;
-    }
-
-    impl<Iter> ProgressBarIteratorExt for Iter
-    where
-        Iter: Iterator,
-    {
-        fn progress(self) -> ProgressBar<Self> {
-            ProgressBar::new(self)
+        /// Use a spinner with a sized iterator instead. This overrides
+        /// the default behaviour of `progress()`, which is to use a bar for sized iterators.
+        ///
+        /// # Example
+        ///
+        /// ```
+        /// use progrust::ProgressIndicator;
+        ///
+        /// let v = &[1, 2, 3];
+        /// let p = v.iter().progress().spinner();
+        /// for i in p {
+        ///     println!("{}", i);
+        /// }
+        /// ```
+        pub fn spinner(self) -> Self {
+            self
         }
     }
 
@@ -135,9 +179,9 @@ pub mod bar {
         use super::*;
 
         #[test]
-        fn progress_adapted_iterator_still_iterates() {
+        fn iterator_still_iterates() {
             let v = &[1, 2, 3];
-            let mut p = v.iter().progress().sized();
+            let mut p = v.iter().progress().bar();
             assert_eq!(p.next(), Some(&1));
             assert_eq!(p.next(), Some(&2));
             assert_eq!(p.next(), Some(&3));
@@ -145,31 +189,40 @@ pub mod bar {
         }
 
         #[test]
-        fn progress_bar_format_empty_sized_iter() {
+        fn format_empty_sized_iter() {
             let v: Vec<u8> = Vec::new();
-            let p = v.iter().progress().sized();
+            let p = v.iter().progress().bar();
             assert_eq!(p.format_bar().len(), 19);
         }
 
         #[test]
-        fn progress_bar_format_sized_iter() {
+        fn format_sized_iter() {
             let v = &[1];
-            let p = v.iter().progress().sized();
+            let p = v.iter().progress().bar();
             assert!(p.format_bar().starts_with(' '));
             assert!(p.format_bar().contains('%'));
         }
 
         #[test]
-        fn progress_bar_with_width() {
+        fn format_with_width() {
             let v = &[1, 2, 3];
-            let p = v.iter().progress().sized_custom_width(10);
+            let p = v.iter().progress().bar_custom_width(10);
+            assert!(p.format_bar().contains('%'));
             assert_eq!(p.format_bar().len(), 91);
             assert_eq!(p.width, 10);
             assert_eq!(p.nbars, 8);
         }
 
         #[test]
-        fn progress_bar_format_unsized_iter() {
+        fn progress_bar_with_width() {
+            let v = &[1, 2, 3];
+            let p = v.iter().progress().spinner();
+            assert!(p.format_bar().starts_with(' '));
+            assert!(p.format_bar().contains("it"));
+        }
+
+        #[test]
+        fn format_unsized_iter() {
             let v = [0..];
             let p = v.iter().progress();
             assert!(p.format_bar().starts_with(' '));
@@ -178,4 +231,4 @@ pub mod bar {
     }
 }
 
-pub use bar::ProgressBarIteratorExt as ProgressBar;
+pub use bar::ProgressIndicatorIteratorExt as ProgressIndicator;
