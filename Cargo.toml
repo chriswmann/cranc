@@ -1,19 +1,19 @@
 [package]
-name = "progrust-bar"
-version = "0.1.3"
+name = "cranc"
+version = "0.1.0"
 edition = "2021"
 authors = ["Chris Mann"]
 license = "MIT OR Apache-2.0"
-description = "A simple progress bar for Rust"
+description = "A simple progress indicator for Rust"
 keywords = ["progress", "bar", "cli", "terminal"]
 categories = ["command-line-utilities"]
-homepage = "https://github.com/chriswmann/progrust-bar"
-repository = "https://github.com/chriswmann/progrust-bar"
+homepage = "https://github.com/chriswmann/cranc"
+repository = "https://github.com/chriswmann/cranc"
 readme = "README.md"
 include = ["src/lib.rs", "LICENSE", "README.md"]
 
 [lib]
-name = "progrust"
+name = "cranc"
 path = "src/lib.rs"
 
 [dependencies]
