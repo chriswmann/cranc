@@ -1,11 +1,11 @@
 [package]
 name = "cranc"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Chris Mann"]
 license = "MIT OR Apache-2.0"
 description = "A simple progress indicator for Rust"
-keywords = ["progress", "bar", "cli", "terminal"]
+keywords = ["progress", "bar", "spinner", "cli", "terminal"]
 categories = ["command-line-utilities"]
 homepage = "https://github.com/chriswmann/cranc"
 repository = "https://github.com/chriswmann/cranc"

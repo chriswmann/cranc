@@ -123,7 +123,7 @@ pub mod bar {
         /// # Example
         ///
         /// ```
-        /// use progrust::ProgressIndicator;
+        /// use cranc::ProgressIndicator;
         ///
         /// let v = &[1, 2, 3];
         /// let p = v.iter().progress().bar();
@@ -141,7 +141,7 @@ pub mod bar {
         /// # Example
         ///
         /// ```
-        /// use progrust::ProgressIndicator;
+        /// use cranc::ProgressIndicator;
         ///
         /// let v = &[1, 2, 3];
         /// let p = v.iter().progress().bar_custom_width(10);
@@ -161,7 +161,7 @@ pub mod bar {
         /// # Example
         ///
         /// ```
-        /// use progrust::ProgressIndicator;
+        /// use cranc::ProgressIndicator;
         ///
         /// let v = &[1, 2, 3];
         /// let p = v.iter().progress().spinner();
